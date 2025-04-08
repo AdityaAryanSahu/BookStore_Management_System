@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +12,9 @@ class AuthRepo {
 
     final url = Uri.parse('https://dbs-proj2024-backend.vercel.app/customers/');
     final headers = {'Content-Type': 'application/json'};
-    final body = {'name': uname, 'passwd': passwd};
+    final today = DateTime.now();
+  final dateOnly = "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+     final body = {'name': uname, 'passwd': passwd,'account_created': dateOnly};
 
     final response =
         await client.post(url, headers: headers, body: jsonEncode(body));
