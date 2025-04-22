@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import '../models/book.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,9 +21,10 @@ class RecommendationsRepo {
         return ret;
       }
       for (var entry in mp["recommendations"]!) {
-        ret.add(AllBooksRepo.allBooks
-            .where((element) => element.bookId == entry)
-            .first);
+        var matchingBooks = AllBooksRepo.allBooks.where((element) => element.bookId == entry);
+      if (matchingBooks.isNotEmpty) {
+       ret.add(matchingBooks.first);
+      } 
       }
       return ret;
     }
