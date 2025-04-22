@@ -1,3 +1,4 @@
+// frontend/lib/screens/book_details_screen/book_details_screen.dart
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:online_bookstore/widgets/snack_b.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
 
 import '../../models/book.dart';
-import '../../repositories/all_books_repo.dart';
 import '../../widgets/book_list_item.dart';
 import '../login_screen/login_screen.dart';
 import '../wishlist_screen/wishlist_screen.dart';
@@ -24,6 +24,14 @@ class BookDetailsScreen extends StatefulWidget {
 
 class _BookDetailsScreenState extends State<BookDetailsScreen> {
   final _bloc = BookDetailsBloc();
+  List<Book> recommendations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize recommendations with current user's recommendations
+    recommendations = AuthRepo.currentUser!.recommendations;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +106,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         ),
         body: BlocConsumer<BookDetailsBloc, BookDetailsState>(
           listenWhen: (previous, current) => current is BookDetailsActionState,
-          buildWhen: (previous, current) => current is! BookDetailsActionState,
+          buildWhen: (previous, current) => current is! BookDetailsActionState || current is RecommendationsUpdatedState,
           listener: (context, state) {
             switch (state.runtimeType) {
               case AddedToWishlistActionState:
@@ -106,6 +114,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                     "Book added to wish list");
                 break;
               case UnableToAddToWishlistActionState:
+              case UnableToRemoveFromWishlistActionState:
                 runRegularSnackBar(context, Icons.error_outline, Colors.red,
                     "Oops! An error occurred.");
                 break;
@@ -152,6 +161,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                   ),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                break;
+              case RecommendationsUpdatedState:
+                // Update the local recommendations list when new recommendations arrive
+                final recState = state as RecommendationsUpdatedState;
+                setState(() {
+                  recommendations = recState.recommendations;
+                });
                 break;
             }
           },
@@ -236,12 +252,10 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           _bloc.add(RemoveBookFromWishlistActionEvent(
                               book: widget.book));
-                          setState(() {});
                         } else {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           _bloc.add(
                               AddBookToWishlistActionEvent(book: widget.book));
-                          setState(() {});
                         }
                       },
                       child: Text(
@@ -297,39 +311,32 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    BlocBuilder<BookDetailsBloc, BookDetailsState>(
-                        builder: (context, state) {
-                      switch (state.runtimeType) {
-                        default:
-                          final recs = AuthRepo.currentUser!.recommendations;
-                          return SizedBox(
-                            height: MediaQuery.sizeOf(context).height * 0.6,
-                            child: recs.isNotEmpty
-                                ? ListView.builder(
-                                    itemCount: recs.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BookDetailsScreen(
-                                                book: recs[index],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: BookListItem(book: recs[index]),
-                                      );
-                                    },
-                                  )
-                                : const Center(
-                                    child: Text(
-                                        "Add a book to your wishlist to get started!"),
-                                  ),
-                          );
-                      }
-                    }),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.6,
+                      child: recommendations.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: recommendations.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            BookDetailsScreen(
+                                          book: recommendations[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: BookListItem(book: recommendations[index]),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                  "Add a book to your wishlist to get recommendations!"),
+                            ),
+                    ),
                     const SizedBox(
                       height: 50,
                     ),
