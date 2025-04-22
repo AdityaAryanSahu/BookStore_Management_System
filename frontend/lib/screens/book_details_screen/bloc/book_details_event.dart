@@ -1,3 +1,4 @@
+// frontend/lib/screens/book_details_screen/bloc/book_details_event.dart
 part of 'book_details_bloc.dart';
 
 @immutable
