@@ -1,6 +1,6 @@
 -- Package in PostgreSQL
-CREATE SCHEMA wishlist_package;
-
+CREATE Package wishlist_package;
+g
 CREATE OR REPLACE PROCEDURE wishlist_package.insert_wishlist(customer_id INT, book_id INT) AS $$
 BEGIN
   INSERT INTO wishlist (customer_id, book_id) VALUES (customer_id, book_id);
