@@ -43,10 +43,10 @@ CREATE TABLE IF NOT EXISTS Main (
 
 CREATE TABLE IF NOT EXISTS Physical_Attr (
     book_id SERIAL PRIMARY KEY,
-    x INT,
-    y INT,
-    z INT,
-    w INT,
+    x INT,  --leng
+    y INT,  --width
+    z INT,  --height
+    w INT,  --wt.
     FOREIGN KEY (book_id) REFERENCES Main(book_id) ON DELETE CASCADE
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS Ratings (
     book_id INT,
     rating_avg FLOAT,
     rating_count INT,
-    for_ages VARCHAR(50),
+    for_ages VARCHAR(50),   --child,adols,adult
     FOREIGN KEY (book_id) REFERENCES Main(book_id) ON DELETE CASCADE
 );
 
@@ -105,9 +105,9 @@ CREATE TABLE IF NOT EXISTS Auth_Book (
     FOREIGN KEY (auth_id) REFERENCES Authors(auth_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS CustomerLogin (
+CREATE TABLE IF NOT EXISTS customer_account_created (
     customer_id INT,
-    last_login TIMESTAMP,
+    account_created date,
     PRIMARY KEY (customer_id),
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE
 );
