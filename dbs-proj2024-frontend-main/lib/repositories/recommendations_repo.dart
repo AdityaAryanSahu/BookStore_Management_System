@@ -10,7 +10,7 @@ class RecommendationsRepo {
     final client = http.Client();
     int cid = AuthRepo.currentUser!.id;
     final url =
-        Uri.parse('https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/recommend/$cid');
+        Uri.parse('https://bookstore-management-system-3lku.onrender.com/recommend/$cid');
     final response = await client.get(url);
 
     if (response.statusCode == 200) {

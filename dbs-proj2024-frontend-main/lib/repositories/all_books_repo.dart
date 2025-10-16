@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/book.dart';
 
 class AllBooksRepo {
-  static String apiURL = "https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/books/";
+  static String apiURL = "https://bookstore-management-system-3lku.onrender.com/books/";
 
   static List<Book> allBooks = [];
 
