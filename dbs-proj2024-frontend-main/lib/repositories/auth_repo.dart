@@ -10,7 +10,7 @@ class AuthRepo {
       String uname, String passwd) async {
     final client = http.Client();
 
-    final url = Uri.parse('https://dbs-proj2024-backend.vercel.app/customers/');
+    final url = Uri.parse('https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/customers/');
     final headers = {'Content-Type': 'application/json'};
     final today = DateTime.now();
   final dateOnly = "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
@@ -41,7 +41,7 @@ class AuthRepo {
     final client = http.Client();
 
     final url = Uri.parse(
-        'https://dbs-proj2024-backend.vercel.app/customer-auth/$uname/$passwd');
+        'https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/customer-auth/$uname/$passwd');
 
     final response = await client.get(url);
     return response;

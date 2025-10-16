@@ -26,7 +26,7 @@ class WishlistRepo {
 
     final client = http.Client();
 
-    final url = Uri.parse('https://dbs-proj2024-backend.vercel.app/wishlist/');
+    final url = Uri.parse('https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/wishlist/');
     final headers = {'Content-Type': 'application/json'};
     final body = {'customer_id': customerId, 'book_id': bookId};
 
@@ -54,7 +54,7 @@ class WishlistRepo {
     final client = http.Client();
 
     final url = Uri.parse(
-        'https://dbs-proj2024-backend.vercel.app/wishlist/$customerId/$bookId');
+        'https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/wishlist/$customerId/$bookId');
     final response = await client.delete(url);
 
     return response;
@@ -64,7 +64,7 @@ class WishlistRepo {
     final client = http.Client();
     int cid = AuthRepo.currentUser!.id;
     final url =
-        Uri.parse('https://dbs-proj2024-backend.vercel.app/wishlist/$cid');
+        Uri.parse('https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/wishlist/$cid');
     final response = await client.get(url);
 
     if (response.statusCode == 200) {

@@ -4,9 +4,15 @@ from fastapi import FastAPI, HTTPException
 from models import *
 from connect_db import get_connection
 from recommend import recommender
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()    # create fastapi instance
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify your frontend domain
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Function to establish database connection
 def get_db_connection():

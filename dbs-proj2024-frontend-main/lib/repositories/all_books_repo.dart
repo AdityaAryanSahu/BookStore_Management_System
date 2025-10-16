@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/book.dart';
 
 class AllBooksRepo {
-  static String apiURL = "https://dbs-proj2024-backend.vercel.app/books/";
+  static String apiURL = "https://cors-anywhere.herokuapp.com/http://0.0.0.0:8000/books/";
 
   static List<Book> allBooks = [];
 
