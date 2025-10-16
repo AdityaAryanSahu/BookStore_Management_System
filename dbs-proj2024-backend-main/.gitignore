@@ -1,0 +1,6 @@
+secret_ops.py
+.env
+venv/
+.idea/
+__pycache__/
+.vercel
