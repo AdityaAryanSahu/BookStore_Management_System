@@ -1,18 +1,21 @@
 from datetime import datetime
 from fastapi import FastAPI, HTTPException
+import uvicorn
 
 from models import *
 from connect_db import get_connection
 from recommend import recommender
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()    # create fastapi instance
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend domain
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Function to establish database connection
 def get_db_connection():
@@ -629,3 +632,7 @@ def get_all_auth_books():
         return {"auth_book_records": auth_book_records}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    
+
